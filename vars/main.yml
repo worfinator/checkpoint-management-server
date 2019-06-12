@@ -1,0 +1,15 @@
+---
+login_response:
+blade_sql_statement: \"SELECT *, CURRENT_TIMESTAMP AS rightnow FROM ( SELECT app.update_name AS app_update_file,round(julianday('now') - julianday(app.update_time, 'unixepoch'),1) AS app_update_age, datetime(app.update_time, 'unixepoch') AS app_update_date,app.blade_status AS app_blade_status FROM appi_updates AS app ORDER BY app.Timestamp DESC LIMIT 1 ) LEFT JOIN ( SELECT ips.update_name AS ips_update_file,round(julianday('now') - julianday(ips.update_time, 'unixepoch'),1) AS ips_update_age, datetime(ips.update_time, 'unixepoch') AS ips_update_date,ips.blade_status AS ips_blade_status FROM ips_updates AS ips ORDER BY ips.Timestamp DESC LIMIT 1 ) LEFT JOIN ( SELECT abu.update_name AS ab_update_file,round(julianday('now') - julianday(abu.update_time, 'unixepoch'),1) AS ab_update_age, datetime(abu.update_time, 'unixepoch') AS ab_update_date,abu.blade_status AS ab_blade_status FROM anti_bot_updates AS abu ORDER BY abu.Timestamp DESC LIMIT 1 ) LEFT JOIN ( SELECT abv.update_name AS av_update_file,round(julianday('now') - julianday(abv.update_time, 'unixepoch'),1) AS av_update_age, datetime(abv.update_time, 'unixepoch') AS av_update_date,abv.blade_status AS av_blade_status FROM anti_virus_updates AS abv ORDER BY abv.Timestamp DESC LIMIT 1 );\"
+blade_query_fields: 
+checkpoint_info: {}
+results: []
+session_valid: False
+default_info:
+  message: Device was not found in management server
+  ips: Failed
+  ab: Failed
+  ap: Failed
+  av: Failed
+  data_exists: False
+  passed: False

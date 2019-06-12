@@ -1,0 +1,16 @@
+- name: login
+  check_point_mgmt:
+    command: login
+    parameters:
+      username: "{{ cpms_username }}"
+      password: "{{ cpms__password }}"
+      management: "{{ CheckPoint_Management_Servers | first }}"
+    fingerprint: "{{ cpms_fingerprint }}"
+  register: login_response
+
+#- debug:
+#    var: login_response
+
+- set_fact:
+    session_valid: True
+  when: login_response is not failed

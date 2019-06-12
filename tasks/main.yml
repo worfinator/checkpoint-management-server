@@ -1,0 +1,18 @@
+---
+- include: login.yml
+  when: not session_valid
+
+- set_fact:
+    mgmt_task: nothing
+  when: mgmt_task is undefined
+
+- include: status.yml
+  with_items: "{{ CheckPoints }}"
+  loop_control:
+    loop_var: checkpoint
+  when: mgmt_task == 'status'
+
+#- debug:
+#    var: checkpoints_results
+
+- include: logout.yml

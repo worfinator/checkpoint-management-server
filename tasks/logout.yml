@@ -1,0 +1,5 @@
+- name: logout
+  check_point_mgmt:
+    command: logout
+    session-data: "{{ login_response }}"
+  when: session_valid == True

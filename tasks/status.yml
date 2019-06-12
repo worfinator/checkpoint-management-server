@@ -1,0 +1,45 @@
+---
+- include: login.yml
+  when: not session_valid
+
+- name: init data
+  set_fact:
+    checkpoints_results: "{{ checkpoints_results | combine ({checkpoint: default_info }) }}"
+
+- name: run script
+  check_point_mgmt:
+    command: run-script
+    parameters:
+      script-name: "Query Blades"
+      script: sqlite3 /var/log/CPView_history/CPViewDB.dat {{ blade_sql_statement }}
+      set-session-id: True
+      targets: ["{{ checkpoint }}"]
+    session-data: "{{ login_response }}"
+  register: result
+  ignore_errors: True
+  when: session_valid
+
+#- debug:
+#    var: result
+
+- name: invalidate sessions
+  set_fact:
+    session_valid: False
+  when: result.failed
+
+- name: set data
+  bladeinfo:
+    name: "{{ item['task-name'] }}"
+    data: "{{ item['task-details'][0]['statusDescription'] }}"
+  with_items: "{{ result.response.tasks }}"
+  register: query_data
+  when: not result.failed
+  no_log: True
+
+- name: set results data
+  set_fact:    
+    checkpoints_results: "{{ checkpoints_results|combine ({item.results['host']: item.results }) }}"
+  with_items: "{{ query_data.results }}"
+  when: not result.failed
+  no_log: True
+
