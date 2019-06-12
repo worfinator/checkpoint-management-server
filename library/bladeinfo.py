@@ -106,7 +106,7 @@ def main():
     bladedata = checkBlades(bladedata)
     
     module.exit_json(changed=False,
-                     results=bladedata)
+                     ansible_module_results=bladedata)
 
 
 if __name__ == '__main__':

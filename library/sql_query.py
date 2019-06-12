@@ -34,7 +34,7 @@ def main():
         data = lambda: [dict(row) for row in res.fetchall()]
 
     module.exit_json(changed=False,
-                     results=data())
+                     ansible_module_results=data())
 
 
 if __name__ == '__main__':
