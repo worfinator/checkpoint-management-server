@@ -60,7 +60,7 @@ Presuming that you are using this role within Ansible Tower with inventory group
         var: CheckPoints
 
     # talk to management server and get CP FW data
-    - include_role: name=management-server
+    - include_role: name=checkpoint-management-server
 
     - name: debug results
       debug:
