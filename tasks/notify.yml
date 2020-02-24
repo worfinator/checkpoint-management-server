@@ -1,0 +1,30 @@
+- name: Show failed
+  debug:
+    var: checks_failed
+
+- name: Set email content
+  set_fact:
+    email:
+      header: "CheckPoint Config Failure on {{ inventory_hostname }}"
+      title: "{{ inventory_hostname }} Config failure"
+      description: "{{ checks_failed }}"
+    email_file: "/tmp/{{ uuid }}.txt"
+  vars:
+    uuid: "{{ ansible_date_time.iso8601_micro | to_uuid }}"
+  
+- name: Create email body
+  template:
+    src: ../templates/email.j2
+    dest: "{{ email_file }}"
+  delegate_to: localhost
+
+- name: Send Fail Email to User
+  mail:
+    host: "{{ email_settings.host }}"
+    port: "{{ email_settings.port | int }}"
+    to: "{{ user_email }}"
+    from: "{{ email_settings.from }}"
+    subject: Your download has failed
+    subtype: html
+    body: '{{ lookup("file", email_file) }}'
+  delegate_to: localhost

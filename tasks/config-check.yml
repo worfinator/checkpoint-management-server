@@ -1,0 +1,19 @@
+# - name: Test host data
+#   debug:
+#     var: checkpoint_hosts
+
+# - debug:
+#     var: vars
+
+- debug:
+    msg: "I have stuff to do for {{ inventory_hostname }}"
+  when: hosts_to_check[inventory_hostname | upper] is defined
+
+- include: check.yml
+  with_items: "{{ hosts_to_check[inventory_hostname] }}"
+  loop_control:
+    loop_var: check
+
+- include: notify.yml
+  when: checks_failed | length > 0
+  

@@ -1,0 +1,22 @@
+---
+- name: run script
+  check_point_mgmt:
+    command: run-script
+    parameters:
+      script-name: "Check config"
+      script: 'grep -c "{{ check.content }}" {{ check.file }}'
+      targets: "{{ inventory_hostname }}"
+      set-session-id: True
+    session-data: "{{ login_response }}"
+  register: result
+  ignore_errors: yes
+  when: session_valid
+
+- name: Check Results
+  debug:
+    var: result, check
+
+- name: add to failed 
+  set_fact:
+    checks_failed: "{{ checks_failed + [check] }}"
+  

@@ -1,0 +1,35 @@
+{% set data = email.box_content  %}
+
+<div class="ServiceInstance">
+    <div class="header"><h2>{{email.box_title}}</h2></div>
+    <div class="content">
+        {% for mainkey, mainvalue in data.iteritems() %}
+            <h5>
+                &nbsp;{{mainkey}}:
+            
+            {% if data[mainkey] is mapping %}
+            </h5>
+                {% for key, value in data[mainkey].iteritems() %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ key }}:&nbsp;</strong><span>{{ value }}</span></br></br>
+                {% endfor %}
+            {% elif data[mainkey] is iterable  %}
+            </h5>
+                {% set index = 0  %}
+                {% for item in mainvalue %}
+                    {% if index > 0 %}
+                    &nbsp;---------------------------------------- </br></br>	
+                    {% endif %}
+                    {% for key, value in item.iteritems() %}
+                        &nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ key }}:&nbsp;</strong><span>{{ value }}</span></br></br>
+                    {% endfor %}
+                    {% set index = index + 1 %}
+                {% endfor %}
+            {% else %}
+                &nbsp;{{mainvalue}}
+            </h5>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+</div>
+<br><br>

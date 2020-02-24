@@ -12,6 +12,9 @@
     loop_var: checkpoint
   when: mgmt_task == 'status'
 
+- include: config-check.yml
+  when: mgmt_task == 'config-check'
+
 #- debug:
 #    var: checkpoints_results
 

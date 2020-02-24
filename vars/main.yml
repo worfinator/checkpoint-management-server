@@ -13,3 +13,4 @@ default_info:
   av: Failed
   data_exists: False
   passed: False
+checks_failed: [] 
